@@ -2,53 +2,52 @@ const http = require("http");
 const fs = require("fs");
 //module URL
 const { URL } = require("url");
+const path = require("path");
 
 const server = http.createServer((req, res) => {
   const myurl = new URL(req.url, `http://${req.headers.host}`, true);
   const product = myurl.pathname;
+  const templatesPath = path.join(__dirname, "templates");
 
-  try {
-    const templatesPath = "../templates";
-    const files = fs.readdirSync(templatesPath);
-    console.log("Files in the directory:", files);
+  const file = {
+    "/": "index.html",
+    "/home": "idex.html",
 
-    files.forEach((file) => {
-      const p = path.join(templatesPath, file);
-      const id = [1, 2, 3];
-      fs.readFile(p, "utf8", (err, data) => {
-        // if (err) throw err;
-        // const RouteApi = {
-        //   "/": () => res.end(data),
-        //   [`/product?=${id}`]: () => res.end(data),
-        // };
+    "/product/id=1": "product1.html",
+    "/product/1": "product1.html",
 
-        // const api = RouteApi[product];
-        // if (api) {
-        //   api();
-        // }
-        if (product === "/") {
-          res.writeHead(200, { "content-type": "text/html" });
-          res.end(data);
-        } else if (product === `/product`) {
-          res.end(data);
-        } else {
-          res.end(err);
-        }
-      });
-      // if (product === "/" || product === "/home") {
-      //   res.end();
-      // } else if (product === `/product?=${id}`) {
-      //   //TODO:
-      //   //product show link and click imags
-      //   //สรัางarray
-      // } else {
-      //   res.writeHead(404);
-      //   res.end(`<h1>Error</h1>`);
-      // }
+    "/product/id=2": "product2.html",
+    "/product/2": "product2.html",
+
+    "/product/id=3": "product3.html",
+    "/product/3": "product3.html",
+  };
+  const filename = file[product];
+  if (filename) {
+    fs.readFile(path.join(templatesPath, filename), "utf8", (err, data) => {
+      if (err) {
+        res.writeHead(404, { "content-type": "text/html" });
+        return res.end("<h1>File Not Found err</h1>");
+      }
+      res.writeHead(200, { "content-type": "text/html" });
+      res.end(data);
     });
-  } catch (err) {
-    console.log("Error reading directory:", err);
+  } else {
+    res.writeHead(404, { "Content-Type": "text/html" });
+    res.end('<h1 style="color:red">404 Page Not Found file</h1>');
   }
+  // files.forEach((file) => {
+  //   if (pathProduct) {
+  //     fs.readFile(path.join(templatesPath, file), "utf8", (err, data) => {
+  //       if (err) {
+  //         res.writeHead(404, { "content-type": "text/html" });
+  //         return res.end("<h1>File Not Found</h1>");
+  //       }
+  //       res.writeHead(200, { "content-type": "text/html" });
+  //       res.end(data);
+  //     });
+  //   }
+  // });
   // console.log(`URL: ${product}`);
 });
 
