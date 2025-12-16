@@ -36,19 +36,8 @@ const server = http.createServer((req, res) => {
     res.writeHead(404, { "Content-Type": "text/html" });
     res.end('<h1 style="color:red">404 Page Not Found file</h1>');
   }
-  // files.forEach((file) => {
-  //   if (pathProduct) {
-  //     fs.readFile(path.join(templatesPath, file), "utf8", (err, data) => {
-  //       if (err) {
-  //         res.writeHead(404, { "content-type": "text/html" });
-  //         return res.end("<h1>File Not Found</h1>");
-  //       }
-  //       res.writeHead(200, { "content-type": "text/html" });
-  //       res.end(data);
-  //     });
-  //   }
-  // });
-  // console.log(`URL: ${product}`);
+
+  console.log(`URL: ${product}`);
 });
 
 server.listen(8080, () => {
